@@ -20,8 +20,8 @@ Prototype:
 
 ```
 zipack {
-    serialize(Object)  // code
-    parse(Buffer)      // decode
+    dump(Object)  // code
+    load(Buffer)      // decode
 }
 ```
 
@@ -52,10 +52,10 @@ let obj = {
 }
 
 // JS Object ---> Uint8Array
-let buffer = zipack.serialize(obj)
+let buffer = zipack.dump(obj)
 
 // Uint8Array ---> JS Object
-obj = zipack.parse(buffer)
+obj = zipack.load(buffer)
 ```
 
 ## [Object].prototype.zipack
@@ -74,7 +74,7 @@ Date.prototype.zipack = function () {
 
 ## Extension (experimental)
 
-Register callback(params: Uint8Array) to parse zipack, meanwhile, define zipack() returning Uint8Array to serialize. See [extend-demo.js](./extend_demo.js).
+Register callback(params: Uint8Array) to load zipack, meanwhile, define zipack() returning Uint8Array to dump. See [extend-demo.js](./extend_demo.js).
 
 ## License
 

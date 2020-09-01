@@ -238,7 +238,7 @@ const precision = (zipack) => {
   const precision = vlq2nature(zipack) + 1;
   const precision0b = precision.toString(2);
   const exponent = precision0b.length;
-  const precisionReversed = parseInt(
+  const precisionReversed = loadInt(
     precision0b.split("").reverse().join(""),
     2
   );
@@ -290,7 +290,7 @@ function encodeNumber(num) {
     const absolute = Math.abs(num);
     const integer = Math.floor(absolute);
     const precision = absolute.toString(2).split(".")[1];
-    const precisionParsed = parseInt(
+    const precisionParsed = loadInt(
       precision.slice(0, 20).split("").reverse().join(""),
       2
     );
@@ -389,11 +389,11 @@ function encode(obj, layer) {
 /* ******************************************************************************************************************* */
 
 export default {
-  parse(zipack) {
+  load(zipack) {
     zipack.index = 0;
     return typeTable[zipack[zipack.index]](zipack);
   },
-  serialize(obj) {
+  dump(obj) {
     const layer = 0;
     return encode(obj, layer);
   },
