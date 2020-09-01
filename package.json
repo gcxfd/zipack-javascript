@@ -19,5 +19,9 @@
   "homepage": "https://github.com/zipack/zipack-javascript#readme",
   "keywords": [
     "zipack"
-  ]
+  ],
+  "type": "module",
+  "devDependencies": {
+    "coffeescript": "^2.5.1"
+  }
 }
