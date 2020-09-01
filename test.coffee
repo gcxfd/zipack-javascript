@@ -1,3 +1,5 @@
 #!/usr/bin/env coffee
 
-console.log 1
+import scsu from './scsu.js'
+
+scsu.compress("世界您好").length

@@ -12,6 +12,7 @@
  * @version   1.0
  */
 function SCSU() {}
+
 // class constants
 
 SCSU.prototype._SQ0 = 0x01;
@@ -489,5 +490,4 @@ function SCSUError(msg) {
   this.name = 'SCSUError'
 };
 SCSUError.prototype = new Error();
-
-export default new SCSU()
+export default new SCSU();

@@ -5,36 +5,38 @@
 
 // The operands of all bitwise operators are converted to signed 32-bit integers in two's complement format, except for zero-fill right shift which results in an unsigned 32-bit integer.
 
-const typeTable = Array.from({ length: 256 });
+const typeTable = Array.from({
+  length: 256
+});
 
-const _nature_0 = 0b0000_0000;
-const _nature_1 = 0b0111_1111;
-const _positive_integer = 0b1111_1000;
-const _negative_integer = 0b1111_1001;
-const _positive_precision = 0b1111_0010;
-const _negative_precision = 0b1111_0011;
-const _string = 0b1111_0101;
-const _string_0 = 0b1000_0000;
-const _string_1 = 0b1001_1111;
-const _list = 0b1111_0110;
-const _list_0 = 0b1010_0000;
-const _list_1 = 0b1011_1111;
-const _map = 0b1111_0111;
-const _map_0 = 0b1100_0000;
-const _map_1 = 0b1101_1111;
-const _true = 0b1111_0000;
-const _false = 0b1111_0001;
-const _null = 0b1111_1010;
-const _bytes = 0b1111_0100;
+const _nature_0 = 0b0000 _0000;
+const _nature_1 = 0b0111 _1111;
+const _positive_integer = 0b1111 _1000;
+const _negative_integer = 0b1111 _1001;
+const _positive_precision = 0b1111 _0010;
+const _negative_precision = 0b1111 _0011;
+const _string = 0b1111 _0101;
+const _string_0 = 0b1000 _0000;
+const _string_1 = 0b1001 _1111;
+const _list = 0b1111 _0110;
+const _list_0 = 0b1010 _0000;
+const _list_1 = 0b1011 _1111;
+const _map = 0b1111 _0111;
+const _map_0 = 0b1100 _0000;
+const _map_1 = 0b1101 _1111;
+const _true = 0b1111 _0000;
+const _false = 0b1111 _0001;
+const _null = 0b1111 _1010;
+const _bytes = 0b1111 _0100;
 const _undefined = [
-  0b1111_1011,
-  0b1111_1100,
-  0b1111_1101,
-  0b1111_1110,
-  0b1111_1111,
+  0b1111 _1011,
+  0b1111 _1100,
+  0b1111 _1101,
+  0b1111 _1110,
+  0b1111 _1111,
 ];
-const _undefined_0 = 0b1110_0000;
-const _undefined_1 = 0b1110_1111;
+const _undefined_0 = 0b1110 _0000;
+const _undefined_1 = 0b1110 _1111;
 
 const r7 = 2 ** 7;
 const r14 = 2 ** 14;
@@ -60,7 +62,9 @@ function nature2vlq(number) {
     if (number < RR) {
       const faceValue = number - R[index - 1];
 
-      tobeUint8Array = Array.from({ length: index })
+      tobeUint8Array = Array.from({
+          length: index
+        })
         .map((x, i) => (faceValue / r[i]) % r7 | (i ? r7 : 0))
         .reverse();
 
@@ -84,17 +88,19 @@ function vlq2nature(zipack) {
   const vlq = zipack.slice(start, zipack.index);
   return (
     vlq
-      .map((x) => x & (r7 - 1))
-      .reduce((sum, next, i) => {
-        sum += next * r[vlq.length - i - 1];
-        return sum;
-      }, 0) + R[vlq.length - 1]
+    .map((x) => x & (r7 - 1))
+    .reduce((sum, next, i) => {
+      sum += next * r[vlq.length - i - 1];
+      return sum;
+    }, 0) + R[vlq.length - 1]
   );
 }
 
 // 由多个vlq自然数组成的string
 function string2vlqs(string) {
-  const tobeUint8Array = Array.from({ length: string.length })
+  const tobeUint8Array = Array.from({
+      length: string.length
+    })
     .map((x, i) => {
       const char = nature2vlq(string.codePointAt(i));
       return [...char];
@@ -105,7 +111,9 @@ function string2vlqs(string) {
 
 // （不含前缀）
 function vlqs2string(zipack, length) {
-  const codePoints = Array.from({ length }).map(() => vlq2nature(zipack));
+  const codePoints = Array.from({
+    length
+  }).map(() => vlq2nature(zipack));
   return String.fromCodePoint(...codePoints);
 }
 
@@ -124,11 +132,13 @@ while (i <= _nature_1) {
 
 // 小字典
 const miniMap = (zipack) => {
-  const length = zipack[zipack.index] & 0b0001_1111;
+  const length = zipack[zipack.index] & 0b0001 _1111;
   zipack.index++;
 
   const map = Object.fromEntries(
-    Array.from({ length }).map(() => {
+    Array.from({
+      length
+    }).map(() => {
       const keyLength = vlq2nature(zipack);
       const key = vlqs2string(zipack, keyLength);
       const value = typeTable[zipack[zipack.index]](zipack);
@@ -151,7 +161,9 @@ typeTable[_map] = (zipack) => {
   const length = vlq2nature(zipack) + 32;
 
   const map = Object.fromEntries(
-    Array.from({ length }).map(() => {
+    Array.from({
+      length
+    }).map(() => {
       const keyLength = vlq2nature(zipack);
       const key = vlqs2string(zipack, keyLength);
       const value = typeTable[zipack[zipack.index]](zipack);
@@ -165,9 +177,11 @@ typeTable[_map] = (zipack) => {
 
 // 小列表
 const miniList = (zipack) => {
-  const length = zipack[zipack.index] & 0b0001_1111;
+  const length = zipack[zipack.index] & 0b0001 _1111;
   zipack.index++;
-  const list = Array.from({ length }).map(() =>
+  const list = Array.from({
+    length
+  }).map(() =>
     typeTable[zipack[zipack.index]](zipack)
   );
   return list;
@@ -182,7 +196,9 @@ while (i <= _list_1) {
 typeTable[_list] = (zipack) => {
   zipack.index++;
   const length = vlq2nature(zipack) + 32;
-  const list = Array.from({ length }).map(() =>
+  const list = Array.from({
+    length
+  }).map(() =>
     typeTable[zipack[zipack.index]](zipack)
   );
   return list;
@@ -190,7 +206,7 @@ typeTable[_list] = (zipack) => {
 
 // 小字符串
 const miniString = (zipack) => {
-  const length = zipack[zipack.index] & 0b0001_1111;
+  const length = zipack[zipack.index] & 0b0001 _1111;
   zipack.index++;
   return vlqs2string(zipack, length);
 };
@@ -306,9 +322,7 @@ function encodeNumber(num) {
 function encodeString(string) {
   // 小字符串还是大字符串
   const tobeUint8Array =
-    string.length < 32
-      ? [_string_0 | string.length]
-      : [_string, ...nature2vlq(string.length - 32)];
+    string.length < 32 ? [_string_0 | string.length] : [_string, ...nature2vlq(string.length - 32)];
 
   string.split("").forEach((char) => {
     tobeUint8Array.push(...nature2vlq(char.codePointAt(0)));
@@ -323,9 +337,7 @@ function encodeList(list, layer) {
 
   // 小列表还是大列表
   const tobeUint8Array =
-    list.length < 32
-      ? [_list_0 | list.length]
-      : [_list, [...nature2vlq(list.length - 32)]];
+    list.length < 32 ? [_list_0 | list.length] : [_list, [...nature2vlq(list.length - 32)]];
 
   list.forEach((o) => {
     tobeUint8Array.push(...encode(o, layer));
@@ -342,9 +354,7 @@ function encodeMap(map, layer) {
 
   // 小字典还是大字典
   const tobeUint8Array =
-    keyValues.length < 32
-      ? [_map_0 | keyValues.length]
-      : [_map, ...nature2vlq(keyValues.length - 32)];
+    keyValues.length < 32 ? [_map_0 | keyValues.length] : [_map, ...nature2vlq(keyValues.length - 32)];
 
   keyValues.forEach(([k, v]) => {
     tobeUint8Array.push(...nature2vlq(k.length));
@@ -378,9 +388,9 @@ function encode(obj, layer) {
     if (result instanceof Uint8Array) return result;
     else return encode(result, layer);
   } else {
-    const description = obj.toString
-      ? obj.toString()
-      : Object.prototype.toString.call(obj);
+    const description = obj.toString ?
+      obj.toString() :
+      Object.prototype.toString.call(obj);
     return encode(description, layer);
   }
 }
@@ -397,5 +407,10 @@ export default {
     const layer = 0;
     return encode(obj, layer);
   },
-  extension: { _undefined, _undefined_0, _undefined_1, typeTable },
+  extension: {
+    _undefined,
+    _undefined_0,
+    _undefined_1,
+    typeTable
+  },
 };
