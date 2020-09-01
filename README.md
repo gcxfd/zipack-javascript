@@ -1,25 +1,27 @@
-# Zipack.JS
+# Zspack
 
-Live demo: https://zipack.github.io/#demo
+Live demo: https://zspack.github.io/#demo
 
-Zipack.js is an official encoder/decoder of [Zipack](https://zipack.github.io/) format using JavaScript with no dependencies.
+Zspack = zipack + [scsu](https://en.wikipedia.org/wiki/Standard_Compression_Scheme_for_Unicode) , hack for Zipack.js
+
+Zipack.js is an official encoder/decoder of [Zipack](https://zspack.github.io/) format using JavaScript with no dependencies.
 
 ## Install
 
 ```shell
-npm install zipack-official
+npm install zspack
 ```
 
 Use ES module in browser or Node.JS:
 
 ```JavaScript
-import zipack from 'zipack.js'
+import * as zspack from from 'zspack'
 ```
 
 Prototype:
 
 ```
-zipack {
+zspack {
     dump(Object)  // code
     load(Buffer)      // decode
 }
@@ -27,7 +29,7 @@ zipack {
 
 ## Default JS Objects
 
-the types zipack support by default:
+the types zspack support by default:
 
 - number
 - string
@@ -52,29 +54,29 @@ let obj = {
 }
 
 // JS Object ---> Uint8Array
-let buffer = zipack.dump(obj)
+let buffer = zspack.dump(obj)
 
 // Uint8Array ---> JS Object
-obj = zipack.load(buffer)
+obj = zspack.load(buffer)
 ```
 
-## [Object].prototype.zipack
+## [Object].prototype.zspack
 
-like toJSON() in JavaScript, define zipack() for specific Objects, which outputs the types zipack support. For example, Date could be stored as number:
+like toJSON() in JavaScript, define zspack() for specific Objects, which outputs the types zspack support. For example, Date could be stored as number:
 
-- function：zipack
+- function：zspack
 - input：none
 - output：default types or Uint8Array
 
 ```javascript
-Date.prototype.zipack = function () {
+Date.prototype.zspack = function () {
   return this.getTime();
 };
 ```
 
 ## Extension (experimental)
 
-Register callback(params: Uint8Array) to load zipack, meanwhile, define zipack() returning Uint8Array to dump. See [extend-demo.js](./extend_demo.js).
+Register callback(params: Uint8Array) to load zspack, meanwhile, define zspack() returning Uint8Array to dump. See [extend-demo.js](./extend_demo.js).
 
 ## License
 

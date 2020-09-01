@@ -84,11 +84,11 @@ function vlq2nature(zipack) {
   const vlq = zipack.slice(start, zipack.index);
   return (
     vlq
-      .map((x) => x & (r7 - 1))
-      .reduce((sum, next, i) => {
-        sum += next * r[vlq.length - i - 1];
-        return sum;
-      }, 0) + R[vlq.length - 1]
+    .map((x) => x & (r7 - 1))
+    .reduce((sum, next, i) => {
+      sum += next * r[vlq.length - i - 1];
+      return sum;
+    }, 0) + R[vlq.length - 1]
   );
 }
 
@@ -307,8 +307,8 @@ function encodeString(string) {
   // 小字符串还是大字符串
   const tobeUint8Array =
     string.length < 32
-      ? [_string_0 | string.length]
-      : [_string, ...nature2vlq(string.length - 32)];
+    ? [_string_0 | string.length]
+    : [_string, ...nature2vlq(string.length - 32)];
 
   string.split("").forEach((char) => {
     tobeUint8Array.push(...nature2vlq(char.codePointAt(0)));
@@ -324,8 +324,8 @@ function encodeList(list, layer) {
   // 小列表还是大列表
   const tobeUint8Array =
     list.length < 32
-      ? [_list_0 | list.length]
-      : [_list, [...nature2vlq(list.length - 32)]];
+    ? [_list_0 | list.length]
+    : [_list, [...nature2vlq(list.length - 32)]];
 
   list.forEach((o) => {
     tobeUint8Array.push(...encode(o, layer));
@@ -343,8 +343,8 @@ function encodeMap(map, layer) {
   // 小字典还是大字典
   const tobeUint8Array =
     keyValues.length < 32
-      ? [_map_0 | keyValues.length]
-      : [_map, ...nature2vlq(keyValues.length - 32)];
+    ? [_map_0 | keyValues.length]
+    : [_map, ...nature2vlq(keyValues.length - 32)];
 
   keyValues.forEach(([k, v]) => {
     tobeUint8Array.push(...nature2vlq(k.length));
@@ -388,14 +388,12 @@ function encode(obj, layer) {
 /* ******************************************************************************************************************* */
 /* ******************************************************************************************************************* */
 
-export default {
-  parse(zipack) {
-    zipack.index = 0;
-    return typeTable[zipack[zipack.index]](zipack);
-  },
-  serialize(obj) {
-    const layer = 0;
-    return encode(obj, layer);
-  },
-  extension: { _undefined, _undefined_0, _undefined_1, typeTable },
+export const load = (zipack) => {
+  zipack.index = 0;
+  return typeTable[zipack[zipack.index]](zipack);
 };
+export const dump = (obj) => {
+  const layer = 0;
+  return encode(obj, layer);
+};
+export const extension = { _undefined, _undefined_0, _undefined_1, typeTable };
